@@ -51,6 +51,30 @@ class Tx {
       })
     })
   }
+
+  updateTxStatus(data){
+    data = {
+      status: data.status,
+      hash: data.hash
+    }
+    let sql = `UPDATE txs SET status = ? WHERE hash = ?`
+    return new Promise((resolve) => {
+      this.db.run(sql, Object.values(data), (err, rows) => {
+        if (err) throw err
+        resolve(rows)
+      })
+    })
+  }
+
+  pendingTx(){
+    let sql = `SELECT * FROM txs WHERE status = 0`
+    return new Promise((resolve) => {
+      this.db.all(sql, [], (err, rows) => {
+        if (err) throw err
+        resolve(rows)
+      })
+    })
+  }
 }
 
 module.exports = new Tx(model.db);

@@ -4,7 +4,9 @@ var paymentsController = require('../controllers/paymentsController');
 var router = express.Router();
 
 router.use(function (req, res, next) {
-  paymentsController.updateTxStatus()
+  if(req.path != '/txs-json'){
+    paymentsController.updateTxStatus()
+  }
   next()
 })
 
