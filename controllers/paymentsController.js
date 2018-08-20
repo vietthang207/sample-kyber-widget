@@ -53,7 +53,7 @@ exports.currentUserTxs = function (req, res) {
 }
 
 exports.updateTxStatus = function (req, res) {
-  let web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io"));
+  let web3 = new Web3(new Web3.providers.HttpProvider(settings.node));
   if (!txChecker) {
     txChecker = setInterval(() => {
       console.log('Time:', Date.now())
