@@ -1,0 +1,35 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
+    script(src="/javascripts/util.js")
+  body
+    #listTxs
+      template(v-if="txs")
+        a(:href="url") Your transactions (
+          span(v-text="txs.length")
+          span )
+        br
+        br
+    block content
+
+    block js
+      script.
+        var paymentToken = localStorage.getItem('paymentToken');
+        txs = new Vue({
+          el: '#listTxs',
+          data: { txs: null , url: '/txs/?paymentToken=' + paymentToken},
+          mounted: function(){
+            if(paymentToken) {
+              fetch('/txs-json?paymentToken=' + paymentToken)
+                .then((response) => {
+                  return response.json();
+                })
+                .then((data) => {
+                  this.txs = data;
+                })
+            }
+          }
+        })

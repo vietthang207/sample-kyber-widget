@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  a(href="/settings") Settings
+  br
+
+  h1 List Books
+  ul#list_book
+    each book in listBook
+      li.text-center
+        a(href="/books/" + book.id)
+          img(src=book.img, alt="")
+        p 
+          a(href="/books/" + book.id) #{book.title}
+        p.author #{book.author}
+        p.price #{book.price} ETH
+        a.btn(href=`/payment-info?bookId=${book.id}`) Buy

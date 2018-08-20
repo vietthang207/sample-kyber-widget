@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  a(href="/") Back
+  br
+  
+  h1 Settings
+  form(action="/settings" method="POST")
+    p
+      label Wallet address
+    p
+      input(type="text", name="wallet" value=settings.wallet)
+    p
+      label Hosts
+    p
+      input(type="text", name="host" value=settings.host)
+    p
+      button Submit

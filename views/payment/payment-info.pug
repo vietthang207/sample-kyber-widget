@@ -1,0 +1,65 @@
+extends ../layout
+
+block content
+  a(href="/") Back
+  br
+  
+  h1 Payment Info
+
+  h4 #{book.title}
+  p Author: #{book.author}
+  p Price: 
+    strong #{book.price}
+  img(src=book.img, alt="")
+
+  #bookData.hide #{JSON.stringify(book)}
+  #settings.hide #{JSON.stringify(settings)}
+
+  #formSubmit
+    h4(v-if="submitted") Submmitted, we are waiting your transaction confirmed.
+    form(@submit="handleSubmit" v-else)
+      p
+        label Email
+      p
+        input(type="text" name="email")
+      p
+        label Phone
+      p
+        input(type="text" name="phone")
+      p
+        label Address
+      p
+        input(type="text" name="address")
+      p
+        button.btn Submit
+
+block append js
+  script.
+    if(!localStorage.getItem('paymentToken')) {
+      localStorage.setItem('paymentToken', uniqString());
+    }
+
+    var payment= new Vue({
+      el: '#formSubmit',
+      data: {
+        book: JSON.parse(document.getElementById('bookData').innerHTML),
+        settings: JSON.parse(document.getElementById('settings').innerHTML),
+        url: 'https://widget.knstats.com',
+        email: '',
+        phone: '',
+        address: '',
+        paymentToken: localStorage.getItem('paymentToken'),
+        submitted: false,
+      },
+      methods: {
+        handleSubmit: function(e){
+          e.preventDefault();
+          data = new FormData(e.target);
+          this.email = data.get('email');
+          this.phone = data.get('phone');
+          this.address = data.get('address');
+          this.submitted = true;
+          window.open(`${this.url}?mode=dom&theme=light&receiveAddr=${this.settings.wallet}&receiveToken=ETH&callback=${this.settings.host}/payment/callback&network=ropsten&receiveAmount=${this.book.price}&bookId=${this.book.id}&email=${this.email}&phone=${this.phone}&address=${this.address}&paymentToken=${this.paymentToken}&paramForwarding=true`, '_blank');
+        }
+      }
+    })

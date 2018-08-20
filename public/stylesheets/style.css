@@ -1,0 +1,41 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#list_book li{
+  display: inline-block;
+  padding: 20px 20px;
+}
+.text-center{
+  text-align: center;
+}
+#list_book .author{
+  margin-top: -7px;
+  font-size: 0.8em;
+  color: #818181;
+}
+.btn{
+  background-color: #00B7FF;
+  display: inline-block;
+  padding: 6px 15px;
+  border-radius: 2px;
+  text-decoration: none;
+  color: #fff;
+  transition: 0.2s;
+  border: 1px solid #00B7FF;
+}
+.btn:hover{
+  background-color: #06a8e8;
+}
+input{
+  width: 400px;
+  padding: 10px 4px;
+}
+.hide{
+  display: none;
+}

@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  a(href="/") Back
+  br
+  
+  h1 Your transaction
+
+  table
+    thead
+      tr
+        th Tx hash
+        th Status
+        th Title
+        th Img
+        th Price
+    each tx in txs
+      tr
+        td
+          a(href=`https://ropsten.etherscan.io/tx/${tx.hash}` target="_blank") #{tx.hash}
+        td #{tx.status}
+        td #{tx.title}
+        td
+          img(src=tx.img, alt="", width="100")
+        td #{tx.price}
