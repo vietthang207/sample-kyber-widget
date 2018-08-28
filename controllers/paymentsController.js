@@ -5,9 +5,7 @@ var settings = require('../models/setting').settings
 var txChecker = null
 
 exports.pay = function (req, res) {
-  console.log(req.body)
-  data = JSON.parse(req.body)
-
+  data = req.body
   Tx.insert({
     hash: data.tx,
     payment_token: data.paymentToken,
