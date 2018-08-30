@@ -66,6 +66,19 @@ class Tx {
     })
   }
 
+  updateTx(hash, data){
+    let buildQuery = Object.keys(data).map(i => ` ${i} = ? `).join(',')
+    let sql = `UPDATE txs SET ${buildQuery} WHERE hash = ?`
+    let arrayValue = Object.values(data)
+    arrayValue.push(hash)
+    return new Promise((resolve) => {
+      this.db.run(sql, arrayValue, (err, rows) => {
+        if (err) throw err
+        resolve(rows)
+      })
+    })
+  }
+
   pendingTx(){
     let sql = `SELECT * FROM txs WHERE status = 0`
     return new Promise((resolve) => {

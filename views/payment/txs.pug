@@ -1,6 +1,10 @@
 extends ../layout
 
 block content
+  script.
+    setTimeout(() => {
+      window.location.reload()
+    }, 5000 )
   a(href="/") Back
   br
   
@@ -11,6 +15,7 @@ block content
       tr
         th Tx hash
         th Status
+        th Block confirm
         th Title
         th Img
         th Price
@@ -19,6 +24,7 @@ block content
         td
           a(href=`https://ropsten.etherscan.io/tx/${tx.hash}` target="_blank") #{tx.hash}
         td #{tx.status}
+        td #{tx.block_confirm}
         td #{tx.title}
         td
           img(src=tx.img, alt="", width="100")

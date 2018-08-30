@@ -3,12 +3,12 @@ var settingsController = require('../controllers/settingsController');
 var paymentsController = require('../controllers/paymentsController');
 var router = express.Router();
 
-router.use(function (req, res, next) {
-  if(req.path != '/txs-json'){
-    paymentsController.updateTxStatus()
-  }
-  next()
-})
+// router.use(function (req, res, next) {
+//   if(req.path != '/txs-json'){
+//     paymentsController.updateTxStatus()
+//   }
+//   next()
+// })
 
 router.get('/', function(req, res, next) {
   res.redirect('/books')
