@@ -5,6 +5,40 @@ var settings = require('../models/setting').settings
 var txChecker = null
 
 var monitorTx = require("monitor-tx")
+
+
+const mineCallback = (err, result) => {
+  console.log("-----------", err, result)
+  if(!err && !result.pending){
+    Tx.updateTx(result.hash, {block_confirm: result.confirmBlock})
+  }
+  
+}
+
+const confirmCallback = (err, result) => {
+  console.log("=====++++++++done+=============================", err, result)
+  var status = 0
+  
+  if(!err && !result.pending && result.confirmTransaction){
+    const confirmStatus = result.confirmTransaction.status
+    switch(confirmStatus){
+      case 'success':
+        status = 1
+        break
+      case 'fail':
+        status = 2
+        break
+      case 'lost':
+        status = 3
+        break
+      case 'not enough':
+        status = 4
+        break
+    }
+
+    Tx.updateTx(result.hash, { status: status, block_confirm: result.confirmBlock })
+  }
+}
 monitorTx.init({
   // nodes: ['https://ropsten.infura.io'],
   // network: 'ropsten'/'mainnet'/'kovan',
@@ -13,39 +47,14 @@ monitorTx.init({
   // lostTimeout: 300,
   // getReceipt: true
   // txs
+  mineCallback: mineCallback,
+  confirmCallback: confirmCallback
 })
 
-const monitorCallback = (err, result) => {
-  console.log("-----------", err, result)
-  if(!err && !result.pending){
-    Tx.updateTx(result.hash, {block_confirm: result.confirmBlock})
-  }
-  
-}
 
-const finishMonitorCallback = (err, result) => {
-  console.log("=====++++++++done+=============================", err, result)
-  var status = 0
-  switch(result.status){
-    case 'success':
-      status = 1
-      break
-    case 'fail':
-      status = 2
-      break
-    case 'lost':
-      status = 3
-      break
-  }
-  if(!err && !result.pending){
-    Tx.updateTx(result.hash, { status: status, block_confirm: result.confirmBlock })
-  }
-}
 
 exports.pay = function (req, res) {
-
   data = req.body
-
   Tx.insert({
     hash: data.tx,
     payment_token: data.paymentToken,
@@ -53,9 +62,8 @@ exports.pay = function (req, res) {
   })
   monitorTx.addTx({
     hash: data.tx,
-    callback: monitorCallback,
-    finishCallback: finishMonitorCallback,
-    // blockConfirm: 30
+    amount: data.receiveAmount,
+    symbol: data.receiveToken
   })
   
 }
@@ -90,6 +98,9 @@ exports.currentUserTxs = function (req, res) {
           break
         case 3:
           tx.status = 'lost'
+          break
+        case 4:
+          tx.status = 'not enough'
           break
       }
     })
