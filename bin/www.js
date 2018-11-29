@@ -15,6 +15,7 @@ var https = require('https');
  */
 
 var port = normalizePort(process.env.PORT || '8000');
+console.log("____________port: ", port)
 app.set('port', port);
 
 /**
@@ -66,6 +67,7 @@ function normalizePort(val) {
  */
 
 function onError(error) {
+  console.log("***************** error listen *", error)
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -98,5 +100,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }

@@ -47,6 +47,8 @@ monitorTx.init({
   // lostTimeout: 300,
   // getReceipt: true
   // txs
+  includeReceipt: true,
+  noPersit: true,
   mineCallback: mineCallback,
   confirmCallback: confirmCallback
 })
@@ -129,3 +131,27 @@ exports.currentUserTxs = function (req, res) {
 //     }, 10000)
 //   }
 // }
+
+
+exports.checkTx = function (req, res){
+  const txHash = req.query.txHash
+  const amount = req.query.amount
+  const symbol = req.query.symbol
+  console.log("__________ check tx:", txHash, amount, symbol)
+
+  try {
+    monitorTx.utils.execTx({
+      hash: txHash,
+      amount: amount,
+      symbol: symbol
+    }, (err, data) => {
+      console.log("***************err   ****", err, data)
+      if(err) return res.send(err.toString())
+  
+      return res.send(data)
+    })
+  } catch (error) {
+    return res.send(error)
+  }
+  
+}
