@@ -11,6 +11,7 @@ var router = express.Router();
 // })
 
 router.get('/', function(req, res, next) {
+  console.log("run **************** index")
   res.redirect('/books')
 });
 
@@ -36,6 +37,11 @@ router.get('/txs-json', function(req, res, next) {
 
 router.get('/txs', function(req, res, next) {
   paymentsController.currentUserTxs(req, res);
+});
+
+router.get('/checkTx', function(req, res, next) {
+  console.log("+++++++++++++")
+  paymentsController.checkTx(req, res)
 });
 
 module.exports = router;

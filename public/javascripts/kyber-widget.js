@@ -80,4 +80,4 @@
           global.kyberWidgetInstance && global.kyberWidgetInstance.render();
       })
   });
-})(this, "https://widget.knstats.com");
+})(this, "https://dev-widget.knstats.com");
